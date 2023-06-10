@@ -24,7 +24,11 @@ exports.create_url = async (req, res) => {
 			shortUrl: customUrl || shortUrl,
 			userId: user._id,
 		});
-		res.json({ response });
+		res.json({
+			error: false,
+			message: "URL shortened successfully",
+			data: { ...response },
+		});
 	} catch (error) {
 		console.log({ error });
 		if (error.code == 11000) {
@@ -39,7 +43,7 @@ exports.create_url = async (req, res) => {
 
 exports.getUrl = async (req, res) => {
 	const { id } = req.params;
-
+	console.log({ id });
 	if (!id) res.status(400).json({ error: true, message: "URL is not valid" });
 
 	try {

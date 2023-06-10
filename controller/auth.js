@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const Url = require("../models/Url");
 const VerifyAccTemp = require("../templates/VerifyAccount");
 const PasswordRecovery = require("../templates/PasswordRecovery");
 const Token = require("../models/Token");
@@ -119,7 +120,7 @@ module.exports.signup = async (req, res) => {
 				}
 
 				// Sending email
-				const url = `https://appscissors.netlify.app/verify-account/${response._id}/${verifyAccountToken}`;
+				const url = `https://6or.netlify.app/confirm-email/${response._id}/${verifyAccountToken}`;
 
 				try {
 					await sendMail(
@@ -206,7 +207,7 @@ module.exports.forgotten_password = async (req, res) => {
 		}
 
 		// Sending email
-		const url = `https://appscissors.netlify.app/reset-password/${response._id}/${forgottenPswdToken}`;
+		const url = `https://6or.netlify.app/reset-password/${response._id}/${forgottenPswdToken}`;
 
 		try {
 			const mail = await sendMail(
@@ -430,6 +431,9 @@ exports.getAuthUser = async (req, res) => {
 				res.status(400).json(null);
 			} else {
 				const result = await User.findById(decodedToken.id, { password: 0 });
+				const urls = await Url.find({ userId: decodedToken.id }).sort({
+					createdAt: -1,
+				});
 				const { _id, firstName, lastName, email } = result;
 				res.json({
 					error: false,
@@ -439,6 +443,7 @@ exports.getAuthUser = async (req, res) => {
 						firstName,
 						lastName,
 						email,
+						urls,
 					},
 				});
 			}
