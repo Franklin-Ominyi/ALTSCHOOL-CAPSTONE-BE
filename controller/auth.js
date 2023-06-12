@@ -434,12 +434,13 @@ exports.getAuthUser = async (req, res) => {
 				const urls = await Url.find({ userId: decodedToken.id }).sort({
 					createdAt: -1,
 				});
-				const { _id, firstName, lastName, email } = result;
+				const { _id, firstName, lastName, email, createdAt } = result;
 				res.json({
 					error: false,
 					message: "you are authenticated..",
 					user: {
 						_id,
+						createdAt,
 						firstName,
 						lastName,
 						email,
