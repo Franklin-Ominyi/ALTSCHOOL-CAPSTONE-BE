@@ -85,7 +85,7 @@ exports.deleteUrl = async (req, res) => {
 		if (!response)
 			res.status(404).json({ error: true, message: "URL not found" });
 		else {
-			res.json({ error: false, data: "delete was successful" });
+			res.json({ error: false, message: "delete was successful" });
 		}
 	} catch (error) {
 		res
